@@ -1,0 +1,46 @@
+{
+  "name": "spfx-mega-menu",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18.17.1 <23.0.0"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@fluentui/react": "^8.110.10",
+    "@microsoft/sp-application-base": "1.22.0",
+    "@microsoft/sp-core-library": "1.22.0",
+    "@microsoft/sp-dialog": "1.22.0",
+    "@microsoft/sp-diagnostics": "1.22.0",
+    "@pnp/logging": "^4.8.0",
+    "@pnp/sp": "^4.8.0",
+    "dompurify": "^3.2.4",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "tslib": "2.3.1"
+  },
+  "devDependencies": {
+    "@microsoft/eslint-config-spfx": "1.22.0",
+    "@microsoft/eslint-plugin-spfx": "1.22.0",
+    "@microsoft/rush-stack-compiler-4.7": "0.1.0",
+    "@microsoft/sp-build-web": "1.22.0",
+    "@microsoft/sp-module-interfaces": "1.22.0",
+    "@rushstack/heft": "0.67.2",
+    "@types/dompurify": "^3.0.5",
+    "@types/react": "17.0.45",
+    "@types/react-dom": "17.0.17",
+    "typescript": "~5.3.3"
+  },
+  "scripts": {
+    "build": "heft build --clean",
+    "clean": "heft clean",
+    "dev": "heft build --watch",
+    "test": "heft test --clean",
+    "bundle": "heft build --clean && node node_modules/@microsoft/sp-module-interfaces/lib/buildShipPackage.js",
+    "package": "heft build --clean --production && npx gulp package-solution --ship",
+    "serve": "heft build --watch --serve",
+    "lint": "eslint src/ --ext .ts,.tsx",
+    "lint:fix": "eslint src/ --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit"
+  }
+}

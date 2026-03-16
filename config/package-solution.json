@@ -1,0 +1,48 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "spfx-mega-menu-client-side-solution",
+    "id": "b1c4a5e2-3d8f-4a9b-8c7e-1f2d3a4b5c6d",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.22.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Mega Menu Navigation with Notification Bar"
+      },
+      "longDescription": {
+        "default": "SPFx Application Customizer that renders a mega menu navigation from a SharePoint list with a notification bar."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "MegaMenu Application Customizer",
+        "description": "Deploys the MegaMenu Application Customizer to the site.",
+        "id": "c2d3e4f5-6a7b-8c9d-0e1f-2a3b4c5d6e7f",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml"
+          ],
+          "elementFiles": [
+            "ClientSideInstance.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/spfx-mega-menu.sppkg"
+  }
+}

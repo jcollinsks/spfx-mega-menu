@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://contoso.sharepoint.com/sites/dev/_layouts/15/workbench.aspx",
+      "customActions": {
+        "a1b2c3d4-e5f6-7890-abcd-ef1234567890": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "menuListName": "MegaMenu",
+            "notificationListName": "Notifications",
+            "logoUrl": "/SiteAssets/logo.png",
+            "rootWebOnly": true
+          }
+        }
+      }
+    },
+    "megaMenu": {
+      "pageUrl": "https://contoso.sharepoint.com/sites/dev/SitePages/Home.aspx",
+      "customActions": {
+        "a1b2c3d4-e5f6-7890-abcd-ef1234567890": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "menuListName": "MegaMenu",
+            "notificationListName": "Notifications",
+            "logoUrl": "/SiteAssets/logo.png",
+            "rootWebOnly": true
+          }
+        }
+      }
+    }
+  }
+}

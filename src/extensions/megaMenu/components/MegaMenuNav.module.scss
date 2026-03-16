@@ -1,0 +1,109 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.megaMenuNav {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+
+  .categoryButton {
+    position: relative;
+    padding: 14px 18px;
+    color: "[theme:white, default:#ffffff]";
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-family: inherit;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &:hover,
+    &.isOpen {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    &:focus {
+      outline: 2px solid "[theme:white, default:#ffffff]";
+      outline-offset: -2px;
+    }
+
+    .chevron {
+      font-size: 10px;
+      transition: transform 200ms ease;
+    }
+
+    &.isOpen .chevron {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.dropdownPanel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 600px;
+  max-width: 900px;
+  background-color: "[theme:white, default:#ffffff]";
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  padding: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  border-top: 3px solid "[theme:themePrimary, default:#0078d4]";
+  box-sizing: border-box;
+
+  .categoryColumn {
+    flex: 1 1 200px;
+    min-width: 180px;
+    max-width: 280px;
+
+    .categoryHeader {
+      font-size: 15px;
+      font-weight: 700;
+      color: "[theme:themePrimary, default:#0078d4]";
+      margin: 0 0 12px 0;
+      padding-bottom: 6px;
+      border-bottom: 2px solid "[theme:themePrimary, default:#0078d4]";
+    }
+
+    .linkList {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      .linkItem {
+        margin: 0;
+
+        a {
+          display: block;
+          padding: 6px 8px;
+          color: "[theme:neutralPrimary, default:#323130]";
+          text-decoration: none;
+          font-size: 14px;
+          border-radius: 2px;
+          transition: background-color 150ms ease;
+
+          &:hover {
+            background-color: "[theme:neutralLighter, default:#f3f2f1]";
+            color: "[theme:themePrimary, default:#0078d4]";
+            text-decoration: underline;
+          }
+
+          &:focus {
+            outline: 2px solid "[theme:themePrimary, default:#0078d4]";
+            outline-offset: -2px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "mega-menu-bundle": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/megaMenu/MegaMenuApplicationCustomizer.js",
+          "manifest": "./src/extensions/megaMenu/MegaMenuApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {}
+}

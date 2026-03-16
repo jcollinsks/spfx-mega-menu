@@ -1,0 +1,65 @@
+.mobileNav {
+  .categorySection {
+    border-bottom: 1px solid "[theme:neutralLight, default:#edebe9]";
+
+    .categoryHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 14px 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      color: "[theme:themePrimary, default:#0078d4]";
+      text-align: left;
+      font-family: inherit;
+
+      &:hover {
+        background-color: "[theme:neutralLighter, default:#f3f2f1]";
+      }
+
+      &:focus {
+        outline: 2px solid "[theme:themePrimary, default:#0078d4]";
+        outline-offset: -2px;
+      }
+
+      .expandIcon {
+        font-size: 12px;
+        transition: transform 200ms ease;
+      }
+
+      &.isExpanded .expandIcon {
+        transform: rotate(180deg);
+      }
+    }
+
+    .categoryLinks {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 8px 0;
+
+      .linkItem {
+        a {
+          display: block;
+          padding: 10px 16px 10px 32px;
+          color: "[theme:neutralPrimary, default:#323130]";
+          text-decoration: none;
+          font-size: 14px;
+
+          &:hover {
+            background-color: "[theme:neutralLighter, default:#f3f2f1]";
+            color: "[theme:themePrimary, default:#0078d4]";
+          }
+
+          &:focus {
+            outline: 2px solid "[theme:themePrimary, default:#0078d4]";
+            outline-offset: -2px;
+          }
+        }
+      }
+    }
+  }
+}
