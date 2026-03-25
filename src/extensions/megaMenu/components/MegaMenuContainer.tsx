@@ -4,6 +4,7 @@ import { IMegaMenuContainerProps } from '../models';
 import { MegaMenuNav } from './MegaMenuNav';
 import { MobileNav } from './MobileNav';
 import { NotificationBar } from './NotificationBar';
+import { isValidNavigationUrl } from '../utils';
 
 export const MegaMenuContainer: React.FC<IMegaMenuContainerProps> = (props) => {
   const { categories, notifications, logoUrl } = props;
@@ -39,7 +40,7 @@ export const MegaMenuContainer: React.FC<IMegaMenuContainerProps> = (props) => {
   return (
     <div className={styles.megaMenuContainer}>
       <div className={styles.navBar}>
-        {logoUrl && (
+        {logoUrl && isValidNavigationUrl(logoUrl) && (
           <div className={styles.logo}>
             <a href="/" aria-label="Home">
               <img src={logoUrl} alt="Site logo" />

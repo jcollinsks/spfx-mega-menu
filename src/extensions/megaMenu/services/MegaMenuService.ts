@@ -1,11 +1,14 @@
 import { SPFI } from '@pnp/sp';
+import { Log } from '@microsoft/sp-core-library';
 import '@pnp/sp/webs';
 import '@pnp/sp/lists';
 import '@pnp/sp/items';
 import { IMenuItem, IMenuCategory } from '../models';
 
-const CACHE_KEY = 'spfx_megamenu_cache';
+const LOG_SOURCE = 'MegaMenuService';
+const CACHE_KEY_PREFIX = 'spfx_megamenu_cache_';
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
+const MAX_ITEMS = 500;
 
 interface CacheEntry {
   data: IMenuCategory[];
@@ -24,10 +27,13 @@ interface SPMenuItemResponse {
 export class MegaMenuService {
   private readonly sp: SPFI;
   private readonly listName: string;
+  private readonly cacheKey: string;
 
-  public constructor(sp: SPFI, listName: string) {
+  public constructor(sp: SPFI, listName: string, siteUrl: string) {
     this.sp = sp;
     this.listName = listName;
+    // CQ-07: Scope cache key to site URL to prevent cross-site collision
+    this.cacheKey = `${CACHE_KEY_PREFIX}${siteUrl}`;
   }
 
   public async getMenuCategories(): Promise<IMenuCategory[]> {
@@ -45,9 +51,10 @@ export class MegaMenuService {
 
   public clearCache(): void {
     try {
-      sessionStorage.removeItem(CACHE_KEY);
-    } catch {
-      // sessionStorage unavailable in some contexts
+      sessionStorage.removeItem(this.cacheKey);
+    } catch (error: unknown) {
+      // CQ-04: Log instead of silently swallowing
+      Log.verbose(LOG_SOURCE, `Failed to clear cache: ${error}`);
     }
   }
 
@@ -58,7 +65,12 @@ export class MegaMenuService {
       .select('Id', 'Title', 'Category', 'NavigationUrl', 'OpenInNewTab', 'SortOrder')
       .filter('IsVisible eq 1')
       .orderBy('SortOrder', true)
-      .top(500)();
+      .top(MAX_ITEMS)();
+
+    // CQ-08: Warn when result count hits the limit (possible truncation)
+    if (response.length === MAX_ITEMS) {
+      Log.warn(LOG_SOURCE, `Fetched ${MAX_ITEMS} items (limit reached). Menu data may be truncated.`);
+    }
 
     return response.map((item) => ({
       id: item.Id,
@@ -90,21 +102,31 @@ export class MegaMenuService {
 
   private getFromCache(): IMenuCategory[] | undefined {
     try {
-      const raw = sessionStorage.getItem(CACHE_KEY);
+      const raw = sessionStorage.getItem(this.cacheKey);
       if (!raw) {
         return undefined;
       }
 
       const entry: CacheEntry = JSON.parse(raw);
+
+      // S-05: Validate cache structure before using it
+      if (!this.isValidCacheEntry(entry)) {
+        Log.warn(LOG_SOURCE, 'Cache entry failed structural validation. Discarding.');
+        sessionStorage.removeItem(this.cacheKey);
+        return undefined;
+      }
+
       const age = Date.now() - entry.timestamp;
 
       if (age > CACHE_TTL_MS) {
-        sessionStorage.removeItem(CACHE_KEY);
+        sessionStorage.removeItem(this.cacheKey);
         return undefined;
       }
 
       return entry.data;
-    } catch {
+    } catch (error: unknown) {
+      // CQ-04: Log instead of silently swallowing
+      Log.verbose(LOG_SOURCE, `Failed to read cache: ${error}`);
       return undefined;
     }
   }
@@ -115,9 +137,40 @@ export class MegaMenuService {
         data,
         timestamp: Date.now(),
       };
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify(entry));
-    } catch {
-      // sessionStorage unavailable or quota exceeded
+      sessionStorage.setItem(this.cacheKey, JSON.stringify(entry));
+    } catch (error: unknown) {
+      // CQ-04: Log instead of silently swallowing
+      Log.verbose(LOG_SOURCE, `Failed to write cache: ${error}`);
     }
+  }
+
+  /**
+   * S-05: Validates that a parsed cache entry has the expected structure.
+   * Detects cache poisoning from other scripts on the same origin.
+   */
+  private isValidCacheEntry(entry: unknown): entry is CacheEntry {
+    if (typeof entry !== 'object' || entry === null) {
+      return false;
+    }
+
+    const candidate = entry as Record<string, unknown>;
+
+    if (typeof candidate.timestamp !== 'number' || !Array.isArray(candidate.data)) {
+      return false;
+    }
+
+    // Validate the first few items have the expected shape
+    const data = candidate.data as unknown[];
+    for (const category of data.slice(0, 5)) {
+      if (typeof category !== 'object' || category === null) {
+        return false;
+      }
+      const cat = category as Record<string, unknown>;
+      if (typeof cat.category !== 'string' || !Array.isArray(cat.items)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

@@ -8,6 +8,7 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
 import { MegaMenuContainer } from './components/MegaMenuContainer';
+import { MegaMenuErrorBoundary } from './components/MegaMenuErrorBoundary';
 import { IMenuCategory, INotification, IMegaMenuContainerProps } from './models';
 import { getSP, getRootSP, MegaMenuService, NotificationService } from './services';
 
@@ -42,19 +43,18 @@ export default class MegaMenuApplicationCustomizer
       const rootWebUrl = this.context.pageContext.site.absoluteUrl;
       getRootSP(this.context, rootWebUrl);
       const rootSp = getRootSP();
-      this._menuService = new MegaMenuService(rootSp, menuListName);
+      this._menuService = new MegaMenuService(rootSp, menuListName, rootWebUrl);
       this._notificationService = new NotificationService(rootSp, notificationListName);
     } else {
+      const currentWebUrl = this.context.pageContext.web.absoluteUrl;
       const sp = getSP();
-      this._menuService = new MegaMenuService(sp, menuListName);
+      this._menuService = new MegaMenuService(sp, menuListName, currentWebUrl);
       this._notificationService = new NotificationService(sp, notificationListName);
     }
 
     await this._loadData();
 
     this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);
-
-    return Promise.resolve();
   }
 
   private async _loadData(): Promise<void> {
@@ -93,7 +93,7 @@ export default class MegaMenuApplicationCustomizer
 
     const logoUrl = this.properties.logoUrl || '';
 
-    const element: React.ReactElement<IMegaMenuContainerProps> = React.createElement(
+    const menuElement: React.ReactElement<IMegaMenuContainerProps> = React.createElement(
       MegaMenuContainer,
       {
         categories: this._categories,
@@ -102,6 +102,8 @@ export default class MegaMenuApplicationCustomizer
         onRefresh: this._handleRefresh.bind(this),
       }
     );
+
+    const element = React.createElement(MegaMenuErrorBoundary, null, menuElement);
 
     ReactDom.render(element, this._topPlaceholder.domElement);
   }

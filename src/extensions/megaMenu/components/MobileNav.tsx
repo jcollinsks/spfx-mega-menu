@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import styles from './MobileNav.module.scss';
 import { IMobileNavProps, IMenuCategory } from '../models';
+import { sanitizeNavigationUrl } from '../utils';
 
 export const MobileNav: React.FC<IMobileNavProps> = ({ categories, isOpen, onDismiss }) => {
   const [expandedCategories, setExpandedCategories] = React.useState<Set<string>>(new Set());
@@ -64,7 +65,7 @@ export const MobileNav: React.FC<IMobileNavProps> = ({ categories, isOpen, onDis
                   {category.items.map((item) => (
                     <li key={item.id} className={styles.linkItem}>
                       <a
-                        href={item.navigationUrl}
+                        href={sanitizeNavigationUrl(item.navigationUrl)}
                         target={item.openInNewTab ? '_blank' : '_self'}
                         rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
                         onClick={onDismiss}

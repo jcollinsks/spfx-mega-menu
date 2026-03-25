@@ -7,10 +7,22 @@ import '@pnp/sp/items';
 let _sp: SPFI | undefined;
 let _rootSp: SPFI | undefined;
 
+/**
+ * CQ-02: Centralizes the unavoidable `any` cast required by PnPjs's SPFx integration
+ * into a single location, rather than spreading it across multiple call sites.
+ * The SPFx context type from @microsoft/sp-application-base does not exactly match
+ * PnPjs's expected type, requiring this cast.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function createSPFI(context: unknown, baseUrl?: string): SPFI {
+  const base = baseUrl ? spfi(baseUrl) : spfi();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return base.using(SPFx(context as any)).using(PnPLogging(LogLevel.Warning));
+}
+
 export function getSP(context?: unknown): SPFI {
   if (context !== undefined && context !== null) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    _sp = spfi().using(SPFx(context as any)).using(PnPLogging(LogLevel.Warning));
+    _sp = createSPFI(context);
   }
 
   if (!_sp) {
@@ -22,10 +34,7 @@ export function getSP(context?: unknown): SPFI {
 
 export function getRootSP(context?: unknown, rootWebUrl?: string): SPFI {
   if (context !== undefined && context !== null && rootWebUrl) {
-    _rootSp = spfi(rootWebUrl)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .using(SPFx(context as any))
-      .using(PnPLogging(LogLevel.Warning));
+    _rootSp = createSPFI(context, rootWebUrl);
   }
 
   if (!_rootSp) {

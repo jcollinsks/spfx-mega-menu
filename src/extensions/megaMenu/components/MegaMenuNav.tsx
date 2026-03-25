@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './MegaMenuNav.module.scss';
 import { IMegaMenuNavProps, IMenuCategory } from '../models';
+import { sanitizeNavigationUrl } from '../utils';
 
 const HOVER_CLOSE_DELAY_MS = 300;
 
@@ -120,7 +121,7 @@ export const MegaMenuNav: React.FC<IMegaMenuNavProps> = ({ categories }) => {
                       {category.items.map((item) => (
                         <li key={item.id} className={styles.linkItem} role="none">
                           <a
-                            href={item.navigationUrl}
+                            href={sanitizeNavigationUrl(item.navigationUrl)}
                             role="menuitem"
                             target={item.openInNewTab ? '_blank' : '_self'}
                             rel={item.openInNewTab ? 'noopener noreferrer' : undefined}

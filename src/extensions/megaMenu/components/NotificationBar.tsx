@@ -2,11 +2,12 @@ import * as React from 'react';
 import DOMPurify from 'dompurify';
 import styles from './NotificationBar.module.scss';
 import { INotificationBarProps, INotification, NotificationPriority } from '../models';
+import { sanitizeColor } from '../utils';
 
 const DISMISSED_KEY_PREFIX = 'spfx_notification_dismissed_';
 
 const ALLOWED_TAGS = ['a', 'b', 'i', 'em', 'strong', 'br', 'p', 'span', 'ul', 'ol', 'li'];
-const ALLOWED_ATTR = ['href', 'target', 'rel', 'class', 'style'];
+const ALLOWED_ATTR = ['href', 'target', 'rel', 'class'];
 
 const BADGE_STYLES: Record<NotificationPriority, string> = {
   Low: styles.badgeLow,
@@ -18,7 +19,9 @@ const BADGE_STYLES: Record<NotificationPriority, string> = {
 function isDismissed(notificationId: number): boolean {
   try {
     return sessionStorage.getItem(`${DISMISSED_KEY_PREFIX}${notificationId}`) === '1';
-  } catch {
+  } catch (error: unknown) {
+    // CQ-04: Log instead of silently swallowing
+    console.debug('[NotificationBar] sessionStorage read failed:', error);
     return false;
   }
 }
@@ -26,8 +29,9 @@ function isDismissed(notificationId: number): boolean {
 function markDismissed(notificationId: number): void {
   try {
     sessionStorage.setItem(`${DISMISSED_KEY_PREFIX}${notificationId}`, '1');
-  } catch {
-    // sessionStorage unavailable
+  } catch (error: unknown) {
+    // CQ-04: Log instead of silently swallowing
+    console.debug('[NotificationBar] sessionStorage write failed:', error);
   }
 }
 
@@ -74,8 +78,8 @@ export const NotificationBar: React.FC<INotificationBarProps> = ({ notifications
           key={notification.id}
           className={styles.notificationItem}
           style={{
-            backgroundColor: notification.backgroundColor,
-            color: notification.textColor,
+            backgroundColor: sanitizeColor(notification.backgroundColor, '#FFF3CD'),
+            color: sanitizeColor(notification.textColor, '#856404'),
           }}
           role="alert"
         >

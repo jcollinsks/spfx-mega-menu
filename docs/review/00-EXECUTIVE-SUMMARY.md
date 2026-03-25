@@ -59,3 +59,4 @@ This is a SharePoint Framework (SPFx) Application Customizer that provides a meg
 | [04-POWERSHELL-REVIEW.md](./04-POWERSHELL-REVIEW.md) | Provisioning script review |
 | [05-RISK-MATRIX.md](./05-RISK-MATRIX.md) | Consolidated risk matrix with severity ratings |
 | [06-REMEDIATION-ROADMAP.md](./06-REMEDIATION-ROADMAP.md) | Prioritized fix plan with phases |
+| [07-FIXES-CHANGELOG.md](./07-FIXES-CHANGELOG.md) | Detailed documentation of all implemented code fixes |
