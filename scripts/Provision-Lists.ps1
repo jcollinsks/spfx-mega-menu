@@ -111,10 +111,7 @@ function Initialize-Field {
     }
 
     if ($RichText -and $FieldType -eq "Note") {
-        $field = Get-PnPField -List $ListTitle -Identity $FieldName
-        $field.RichText = $true
-        $field.Update()
-        Invoke-PnPQuery
+        Set-PnPField -List $ListTitle -Identity $FieldName -Values @{ RichText = $true }
     }
 
     Write-Host "  Field '$FieldName' created on '$ListTitle'." -ForegroundColor Green
