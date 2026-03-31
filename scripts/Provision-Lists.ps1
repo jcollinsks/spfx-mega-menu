@@ -154,7 +154,7 @@ function Set-ListGovernance {
     Set-PnPList -Identity $ListTitle -EnableVersioning $true -MajorVersions 50
     Write-Host "  Versioning enabled on '$ListTitle' (50 major versions)." -ForegroundColor Green
 
-    Set-PnPList -Identity $ListTitle -EnableContentApproval $true
+    Set-PnPList -Identity $ListTitle -EnableModeration $true
     Write-Host "  Content approval enabled on '$ListTitle'." -ForegroundColor Green
 }
 
