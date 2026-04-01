@@ -20,7 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "types": []
+    "types": ["node"]
   },
   "include": [
     "src/**/*.ts",
