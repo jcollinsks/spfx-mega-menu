@@ -20,9 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "types": [
-      "webpack-env"
-    ]
+    "types": []
   },
   "include": [
     "src/**/*.ts",
