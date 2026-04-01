@@ -1,7 +1,5 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
-
 .megaMenuContainer {
-  font-family: $ms-font-family-fallbacks;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
 
   .navBar {
     display: flex;
